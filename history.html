@@ -285,24 +285,27 @@
             // Example: "penguins (rkl) (1-0) - 7,809 ✅"
             const parts = teamStr.trim();
             
+            // Remove any leading/trailing quotes
+            const cleanParts = parts.replace(/^["']|["']$/g, '');
+            
             // Extract team name (everything before first parenthesis)
-            const nameMatch = parts.match(/^([^(]+)/);
-            const name = nameMatch ? nameMatch[1].trim() : '';
+            const nameMatch = cleanParts.match(/^([^(]+)/);
+            const name = nameMatch ? nameMatch[1].trim().replace(/^["']|["']$/g, '') : '';
             
             // Extract league
-            const leagueMatch = parts.match(/\(([^)]+)\)/);
+            const leagueMatch = cleanParts.match(/\(([^)]+)\)/);
             const league = leagueMatch ? leagueMatch[1].toLowerCase() : '';
             
             // Extract record
-            const recordMatch = parts.match(/\(([0-9]+-[0-9]+)\)/);
+            const recordMatch = cleanParts.match(/\(([0-9]+-[0-9]+)\)/);
             const record = recordMatch ? recordMatch[1] : '';
             
             // Extract score
-            const scoreMatch = parts.match(/- ([0-9,]+)/);
+            const scoreMatch = cleanParts.match(/- ([0-9,]+)/);
             const score = scoreMatch ? parseScore(scoreMatch[1]) : 0;
             
             // Determine result (win/loss)
-            const result = parts.includes('✅') ? 'win' : 'loss';
+            const result = cleanParts.includes('✅') ? 'win' : 'loss';
             
             return { name, league, record, score, result };
         }
