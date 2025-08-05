@@ -9,12 +9,30 @@
     <style>
         @import url('https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css');
         
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        :root {
+            --bg-color: #121212;
+            --card-color: #1e1e1e;
+            --accent-color: #4b967d;
+            --text-color: #ffffff;
+            --text-muted: #aaa;
+            --header-color: #2a2a2a;
+            --hover-color: #353535;
         }
         
-        .gradient-bg {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        body {
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+        
+        .dark-bg {
+            background-color: var(--bg-color);
+        }
+        
+        .card-dark {
+            background-color: var(--card-color);
+            border: 1px solid #333;
+            box-shadow: 0 0 12px rgba(0, 204, 102, 0.15);
         }
         
         .card-hover {
@@ -23,28 +41,59 @@
         
         .card-hover:hover {
             transform: translateY(-2px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            box-shadow: 0 0 20px rgba(0, 204, 102, 0.25);
+            background-color: var(--hover-color);
         }
         
         .tab-active {
-            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
-            color: white;
+            background-color: var(--accent-color);
+            color: var(--bg-color);
+        }
+        
+        .tab-inactive {
+            background-color: var(--header-color);
+            color: var(--text-muted);
+        }
+        
+        .tab-inactive:hover {
+            background-color: var(--hover-color);
+            color: var(--text-color);
         }
         
         .win-card {
-            background: linear-gradient(135deg, #10b981, #059669);
-            color: white;
+            background: linear-gradient(135deg, #00cc66, #00994d);
+            color: var(--bg-color);
         }
         
         .loss-card {
-            background: linear-gradient(135deg, #ef4444, #dc2626);
+            background: linear-gradient(135deg, #ff4444, #cc2222);
             color: white;
         }
         
-        .icon {
-            width: 24px;
-            height: 24px;
-            fill: currentColor;
+        .accent-gradient {
+            background: linear-gradient(135deg, var(--accent-color), #00994d);
+            color: var(--bg-color);
+        }
+        
+        .header-dark {
+            background-color: var(--header-color);
+            border-bottom: 1px solid #333;
+        }
+        
+        .text-accent {
+            color: var(--accent-color);
+        }
+        
+        .text-muted {
+            color: var(--text-muted);
+        }
+        
+        .border-accent {
+            border-color: var(--accent-color);
+        }
+        
+        .bg-accent {
+            background-color: var(--accent-color);
         }
         
         .loading {
@@ -55,17 +104,78 @@
             from { transform: rotate(0deg); }
             to { transform: rotate(360deg); }
         }
+        
+        /* Override Tailwind colors for dark theme */
+        .bg-white {
+            background-color: var(--card-color) !important;
+            color: var(--text-color);
+        }
+        
+        .text-gray-800 {
+            color: var(--text-color) !important;
+        }
+        
+        .text-gray-600 {
+            color: var(--text-muted) !important;
+        }
+        
+        .text-gray-700 {
+            color: var(--text-color) !important;
+        }
+        
+        .text-gray-500 {
+            color: var(--text-muted) !important;
+        }
+        
+        .bg-gray-50 {
+            background-color: var(--header-color) !important;
+        }
+        
+        .bg-gray-100 {
+            background-color: var(--hover-color) !important;
+        }
+        
+        .border-gray-200 {
+            border-color: #333 !important;
+        }
+        
+        .shadow-lg {
+            box-shadow: 0 0 12px rgba(0, 204, 102, 0.15) !important;
+        }
+        
+        .shadow-md {
+            box-shadow: 0 0 8px rgba(0, 204, 102, 0.1) !important;
+        }
+
+        .home-btn {
+            background: #4b967d;
+            border: 1px solid #4b967d;
+            width: 200px;
+            padding: 12px 24px;
+            border-radius: 8px;
+            color: white;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            display: block;
+            text-align: center;
+            margin: 30px auto;
+        }
+        .home-btn:hover {
+            background: #427564;
+        }
     </style>
 </head>
-<body class="bg-gray-50">
-    <div id="app" class="min-h-screen">
+<body class="dark-bg">
+    <div id="app" class="min-h-screen dark-bg">
         <!-- Header -->
-        <div class="gradient-bg text-white p-8">
+        <div class="accent-gradient p-8">
             <div class="max-w-7xl mx-auto">
                 <div class="flex items-center justify-between">
                     <div>
-                        <h1 class="text-5xl font-bold mb-2">League History</h1>
-                        <p class="text-xl opacity-90">Track games, records, and team performance across RKL and NKA leagues</p>
+                        <h1 class="text-5xl font-bold mb-2" style="color: #121212;">League History</h1>
+                        <p class="text-xl opacity-90" style="color: #1a1a1a;">Track games, records, and team performance across RKL and NKA leagues</p>
                     </div>
                     <div class="text-6xl">🏆</div>
                 </div>
@@ -74,32 +184,31 @@
 
         <div class="max-w-7xl mx-auto p-6">
             <!-- Navigation Tabs -->
-            <div class="bg-white rounded-xl shadow-lg mb-8 overflow-hidden">
+            <div class="card-dark rounded-xl shadow-lg mb-8 overflow-hidden">
                 <div class="flex">
                     <button id="games-tab" class="tab-btn flex items-center px-8 py-6 font-semibold transition-all duration-300 tab-active">
                         <span class="mr-3">📅</span>
                         Past Games
                     </button>
-                    <button id="teams-tab" class="tab-btn flex items-center px-8 py-6 font-semibold transition-all duration-300 text-gray-600 hover:text-gray-800">
+                    <button id="teams-tab" class="tab-btn flex items-center px-8 py-6 font-semibold transition-all duration-300 tab-inactive">
                         <span class="mr-3">👥</span>
                         Team Records
                     </button>
-                    <button id="analytics-tab" class="tab-btn flex items-center px-8 py-6 font-semibold transition-all duration-300 text-gray-600 hover:text-gray-800">
+                    <button id="analytics-tab" class="tab-btn flex items-center px-8 py-6 font-semibold transition-all duration-300 tab-inactive">
                         <span class="mr-3">📊</span>
                         Analytics
                     </button>
-
                 </div>
             </div>
 
             <!-- Loading Indicator -->
-            <div id="loading" class="hidden text-center py-12">
+            <div id="loading" class="text-center py-12">
                 <div class="inline-block w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full loading"></div>
                 <p class="mt-4 text-gray-600">Loading data...</p>
             </div>
 
             <!-- Content Sections -->
-            <div id="games-content" class="content-section">
+            <div id="games-content" class="content-section hidden">
                 <h2 class="text-3xl font-bold text-gray-800 mb-8">Recent Matches</h2>
                 <div id="games-container">
                     <!-- Games will be populated here -->
@@ -121,6 +230,8 @@
             </div>
         </div>
     </div>
+    
+    <a href="index.html" class="home-btn">🏠 Home</a>
 
     <script>
         // Global state
@@ -130,37 +241,6 @@
             nkaRecords: {},
             isDataLoaded: false
         };
-
-        // Sample data
-        const sampleData = {
-            pastGames: [
-                {
-                    date: "aug 3rd 2025",
-                    matches: [
-                        {
-                            team1: { name: "penguins", league: "rkl", record: "1-0", score: 7809, result: "win" },
-                            team2: { name: "flames", league: "rkl", record: "0-1", score: 6230, result: "loss" },
-                            format: "2v2"
-                        },
-                        {
-                            team1: { name: "shockers", league: "nka", record: "1-0", score: 22729, result: "win" },
-                            team2: { name: "penguins", league: "rkl", record: "1-1", score: 19644, result: "loss" },
-                            format: "6v6"
-                        }
-                    ]
-                }
-            ],
-            rklRecords: {
-                penguins: { allTime: "1-1", "2v2": "1-0", "6v6": "0-1" },
-                flames: { allTime: "0-1", "2v2": "0-1" }
-            },
-            nkaRecords: {
-                shockers: { allTime: "1-0", "6v6": "1-0" }
-            }
-        };
-
-        // Initialize with sample data
-        gameData = { ...sampleData, isDataLoaded: true };
 
         // CSV URLs
         const csvUrls = {
@@ -181,10 +261,10 @@
                     // Update tab styles
                     tabs.forEach(t => {
                         t.classList.remove('tab-active');
-                        t.classList.add('text-gray-600', 'hover:text-gray-800');
+                        t.classList.add('tab-inactive');
                     });
                     tab.classList.add('tab-active');
-                    tab.classList.remove('text-gray-600', 'hover:text-gray-800');
+                    tab.classList.remove('tab-inactive');
                     
                     // Show/hide content
                     contents.forEach(content => content.classList.add('hidden'));
@@ -193,20 +273,173 @@
             });
         }
 
+        // Helper function to parse score from string
+        function parseScore(scoreStr) {
+            // Remove commas and any non-numeric characters except digits
+            const cleanScore = scoreStr.replace(/[^0-9]/g, '');
+            return parseInt(cleanScore) || 0;
+        }
+
+        // Helper function to parse team string
+        function parseTeamString(teamStr) {
+            // Example: "penguins (rkl) (1-0) - 7,809 ✅"
+            const parts = teamStr.trim();
+            
+            // Extract team name (everything before first parenthesis)
+            const nameMatch = parts.match(/^([^(]+)/);
+            const name = nameMatch ? nameMatch[1].trim() : '';
+            
+            // Extract league
+            const leagueMatch = parts.match(/\(([^)]+)\)/);
+            const league = leagueMatch ? leagueMatch[1].toLowerCase() : '';
+            
+            // Extract record
+            const recordMatch = parts.match(/\(([0-9]+-[0-9]+)\)/);
+            const record = recordMatch ? recordMatch[1] : '';
+            
+            // Extract score
+            const scoreMatch = parts.match(/- ([0-9,]+)/);
+            const score = scoreMatch ? parseScore(scoreMatch[1]) : 0;
+            
+            // Determine result (win/loss)
+            const result = parts.includes('✅') ? 'win' : 'loss';
+            
+            return { name, league, record, score, result };
+        }
+
         // CSV Data Loading
         async function loadCSVData() {
-            // Function removed - no longer needed
+            try {
+                const loadingEl = document.getElementById('loading');
+                loadingEl.classList.remove('hidden');
+
+                // Load all CSV files
+                const [pastGamesResponse, rklResponse, nkaResponse] = await Promise.all([
+                    fetch(csvUrls.pastGames),
+                    fetch(csvUrls.rklRecords),
+                    fetch(csvUrls.nkaRecords)
+                ]);
+
+                const [pastGamesText, rklText, nkaText] = await Promise.all([
+                    pastGamesResponse.text(),
+                    rklResponse.text(),
+                    nkaResponse.text()
+                ]);
+
+                // Parse the data
+                parsePastGamesCSV(pastGamesText);
+                parseTeamRecordsCSV(rklText, 'rkl');
+                parseTeamRecordsCSV(nkaText, 'nka');
+
+                gameData.isDataLoaded = true;
+                loadingEl.classList.add('hidden');
+                
+                // Show games content by default
+                document.getElementById('games-content').classList.remove('hidden');
+                
+                renderAllContent();
+            } catch (error) {
+                console.error('Error loading CSV data:', error);
+                document.getElementById('loading').innerHTML = `
+                    <div class="text-center py-12">
+                        <div class="text-red-500 text-xl mb-4">❌ Error loading data</div>
+                        <p class="text-muted">Please check the CSV URLs and try again.</p>
+                    </div>
+                `;
+            }
         }
 
-        // Parse CSV functions (to be implemented when actual data is available)
+        // Parse past games CSV
         function parsePastGamesCSV(csvText) {
-            // Parse your specific format here
-            // This would convert CSV text to gameData.pastGames format
+            const lines = csvText.split('\n').map(line => line.trim()).filter(line => line);
+            gameData.pastGames = [];
+            
+            let i = 0;
+            while (i < lines.length) {
+                const line = lines[i];
+                
+                // Check if this line is a date
+                if (line.includes('202') || line.match(/^[a-z]+ \d+(st|nd|rd|th) \d+/i)) {
+                    const date = line;
+                    const matches = [];
+                    i++;
+                    
+                    // Parse matches for this date
+                    while (i < lines.length && !lines[i].includes('202') && !lines[i].match(/^[a-z]+ \d+(st|nd|rd|th) \d+/i)) {
+                        const currentLine = lines[i];
+                        
+                        // Look for team vs team pattern
+                        if (currentLine.includes('vs (') && i + 2 < lines.length) {
+                            const team1Str = lines[i - 1];
+                            const vsLine = currentLine; // Contains format like "vs (2v2)"
+                            const team2Str = lines[i + 1];
+                            
+                            // Extract format from vs line
+                            const formatMatch = vsLine.match(/vs \(([^)]+)\)/);
+                            const format = formatMatch ? formatMatch[1] : 'unknown';
+                            
+                            // Parse both teams
+                            const team1 = parseTeamString(team1Str);
+                            const team2 = parseTeamString(team2Str);
+                            
+                            if (team1.name && team2.name) {
+                                matches.push({
+                                    team1,
+                                    team2,
+                                    format
+                                });
+                            }
+                            
+                            i += 2; // Skip the team2 line
+                        }
+                        i++;
+                    }
+                    
+                    if (matches.length > 0) {
+                        gameData.pastGames.push({ date, matches });
+                    }
+                    continue;
+                }
+                i++;
+            }
         }
 
+        // Parse team records CSV
         function parseTeamRecordsCSV(csvText, league) {
-            // Parse team records CSV
-            // Update gameData.rklRecords or gameData.nkaRecords
+            const lines = csvText.split('\n');
+            const data = Papa.parse(csvText, {
+                header: false,
+                skipEmptyLines: true
+            }).data;
+
+            const records = league === 'rkl' ? gameData.rklRecords : gameData.nkaRecords;
+            
+            if (data.length < 2) return;
+            
+            // First row should contain team names (skip first empty column)
+            const teamNames = data[0].slice(1).filter(name => name && name.trim());
+            
+            // Process each row
+            for (let i = 1; i < data.length; i++) {
+                const row = data[i];
+                if (!row[0]) continue;
+                
+                const formatName = row[0].toLowerCase().trim();
+                
+                // For each team, get their record for this format
+                teamNames.forEach((teamName, index) => {
+                    const record = row[index + 1]; // +1 because first column is format name
+                    if (record && record.trim()) {
+                        const cleanTeamName = teamName.toLowerCase().trim();
+                        
+                        if (!records[cleanTeamName]) {
+                            records[cleanTeamName] = {};
+                        }
+                        
+                        records[cleanTeamName][formatName] = record.trim();
+                    }
+                });
+            }
         }
 
         // Rendering functions
@@ -215,12 +448,12 @@
             const team2Class = match.team2.result === 'win' ? 'win-card' : 'loss-card';
             
             return `
-                <div class="bg-white rounded-xl shadow-lg p-6 card-hover border-l-4 border-blue-500">
+                <div class="card-dark rounded-xl shadow-lg p-6 card-hover" style="border-left: 4px solid var(--accent-color);">
                     <div class="flex items-center justify-between mb-6">
-                        <span class="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-4 py-2 rounded-full text-sm font-bold uppercase tracking-wide">
+                        <span class="accent-gradient px-4 py-2 rounded-full text-sm font-bold uppercase tracking-wide" style="background: linear-gradient(135deg, var(--accent-color), #00994d); color: var(--bg-color);">
                             ${match.format}
                         </span>
-                        <span class="text-gray-400 text-2xl font-bold">VS</span>
+                        <span class="text-muted text-2xl font-bold">VS</span>
                     </div>
                     
                     <div class="grid grid-cols-2 gap-6">
@@ -252,8 +485,8 @@
                 html += `
                     <div class="mb-12">
                         <div class="flex items-center mb-6">
-                            <span class="text-3xl mr-4">📅</span>
-                            <h3 class="text-2xl font-bold text-gray-700 capitalize">${gameDay.date}</h3>
+                            <span class="text-3xl mr-4" style="color: var(--accent-color);">📅</span>
+                            <h3 class="text-2xl font-bold capitalize" style="color: var(--accent-color);">${gameDay.date}</h3>
                         </div>
                         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                             ${gameDay.matches.map((match, matchIndex) => renderGameCard(match, matchIndex)).join('')}
@@ -262,7 +495,7 @@
                 `;
             });
             
-            container.innerHTML = html || '<p class="text-gray-500 text-center py-12">No games data available</p>';
+            container.innerHTML = html || '<p class="text-muted text-center py-12">No games data available</p>';
         }
 
         function getAllTeams() {
@@ -289,9 +522,9 @@
             };
 
             return {
-                allTime: parseRecord(teamData.allTime),
+                allTime: parseRecord(teamData['all time record']),
                 formats: Object.entries(teamData)
-                    .filter(([key, value]) => key !== 'allTime' && value)
+                    .filter(([key, value]) => key !== 'all time record' && value)
                     .map(([format, record]) => ({ format, ...parseRecord(record) }))
             };
         }
@@ -306,36 +539,35 @@
                 
                 const totalGames = stats.allTime.wins + stats.allTime.losses;
                 const winRate = totalGames > 0 ? (stats.allTime.wins / totalGames * 100).toFixed(1) : 0;
-                const leagueColor = team.league === 'RKL' ? 'from-blue-500 to-blue-600' : 'from-purple-500 to-purple-600';
                 
                 return `
-                    <div class="bg-white rounded-xl shadow-lg p-6 card-hover border-t-4 border-${team.league === 'RKL' ? 'blue' : 'purple'}-500">
+                    <div class="card-dark rounded-xl shadow-lg p-6 card-hover" style="border-top: 4px solid var(--accent-color);">
                         <div class="flex items-center justify-between mb-6">
-                            <h3 class="text-2xl font-bold capitalize text-gray-800">${team.name}</h3>
-                            <span class="bg-gradient-to-r ${leagueColor} text-white px-3 py-1 rounded-full text-sm font-bold">
+                            <h3 class="text-2xl font-bold capitalize text-accent">${team.name}</h3>
+                            <span class="bg-accent text-dark px-3 py-1 rounded-full text-sm font-bold" style="background-color: var(--accent-color); color: var(--bg-color);">
                                 ${team.league}
                             </span>
                         </div>
                         
                         <div class="space-y-4 mb-6">
                             <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
-                                <span class="text-gray-600 font-medium">Overall Record</span>
-                                <span class="font-bold text-lg">${stats.allTime.wins}-${stats.allTime.losses}</span>
+                                <span class="text-muted font-medium">Overall Record</span>
+                                <span class="font-bold text-lg" style="color: var(--accent-color);">${stats.allTime.wins}-${stats.allTime.losses}</span>
                             </div>
-                            <div class="flex justify-between items-center p-3 bg-green-50 rounded-lg">
-                                <span class="text-gray-600 font-medium">Win Rate</span>
-                                <span class="font-bold text-lg text-green-600">${winRate}%</span>
+                            <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                                <span class="text-muted font-medium">Win Rate</span>
+                                <span class="font-bold text-lg" style="color: var(--accent-color);">${winRate}%</span>
                             </div>
                         </div>
                         
                         ${stats.formats.length > 0 ? `
                             <div>
-                                <h4 class="font-bold mb-3 text-gray-700 border-b pb-2">Format Records</h4>
+                                <h4 class="font-bold mb-3 border-b pb-2" style="color: var(--accent-color); border-color: var(--accent-color);">Format Records</h4>
                                 <div class="space-y-2">
                                     ${stats.formats.map(format => `
                                         <div class="flex justify-between items-center">
-                                            <span class="text-gray-600">${format.format}</span>
-                                            <span class="font-semibold">${format.wins}-${format.losses}</span>
+                                            <span class="text-muted">${format.format}</span>
+                                            <span class="font-semibold" style="color: var(--accent-color);">${format.wins}-${format.losses}</span>
                                         </div>
                                     `).join('')}
                                 </div>
@@ -345,7 +577,7 @@
                 `;
             }).join('');
             
-            container.innerHTML = html || '<p class="text-gray-500 text-center py-12 col-span-3">No team data available</p>';
+            container.innerHTML = html || '<p class="text-muted text-center py-12 col-span-3">No team data available</p>';
         }
 
         function renderAnalytics() {
@@ -386,22 +618,22 @@
             
             const html = `
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                    <div class="bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-xl shadow-lg p-6 text-center card-hover">
+                    <div class="accent-gradient text-dark rounded-xl shadow-lg p-6 text-center card-hover">
                         <div class="text-4xl mb-4">👥</div>
                         <h3 class="text-3xl font-bold mb-2">${teams.length}</h3>
                         <p class="opacity-90">Total Teams</p>
                     </div>
-                    <div class="bg-gradient-to-br from-green-500 to-green-600 text-white rounded-xl shadow-lg p-6 text-center card-hover">
+                    <div class="accent-gradient text-dark rounded-xl shadow-lg p-6 text-center card-hover">
                         <div class="text-4xl mb-4">🏟️</div>
                         <h3 class="text-3xl font-bold mb-2">2</h3>
                         <p class="opacity-90">Active Leagues</p>
                     </div>
-                    <div class="bg-gradient-to-br from-purple-500 to-purple-600 text-white rounded-xl shadow-lg p-6 text-center card-hover">
+                    <div class="accent-gradient text-dark rounded-xl shadow-lg p-6 text-center card-hover">
                         <div class="text-4xl mb-4">🎮</div>
                         <h3 class="text-3xl font-bold mb-2">${totalGames}</h3>
                         <p class="opacity-90">Games Played</p>
                     </div>
-                    <div class="bg-gradient-to-br from-yellow-500 to-yellow-600 text-white rounded-xl shadow-lg p-6 text-center card-hover">
+                    <div class="accent-gradient text-dark rounded-xl shadow-lg p-6 text-center card-hover">
                         <div class="text-4xl mb-4">🏆</div>
                         <h3 class="text-3xl font-bold mb-2">${highestScore.toLocaleString()}</h3>
                         <p class="opacity-90">Highest Score</p>
@@ -410,37 +642,37 @@
                 
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
                     <!-- League Breakdown -->
-                    <div class="bg-white rounded-xl shadow-lg p-6">
-                        <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                    <div class="card-dark rounded-xl shadow-lg p-6">
+                        <h3 class="text-xl font-bold text-accent mb-4 flex items-center">
                             <span class="mr-2">🏅</span>
                             League Breakdown
                         </h3>
                         <div class="space-y-4">
-                            <div class="flex justify-between items-center p-3 bg-blue-50 rounded-lg">
-                                <span class="font-semibold text-blue-800">RKL Teams</span>
-                                <span class="text-2xl font-bold text-blue-600">${rklTeams}</span>
+                            <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                                <span class="font-semibold text-accent">RKL Teams</span>
+                                <span class="text-2xl font-bold text-accent">${rklTeams}</span>
                             </div>
-                            <div class="flex justify-between items-center p-3 bg-purple-50 rounded-lg">
-                                <span class="font-semibold text-purple-800">NKA Teams</span>
-                                <span class="text-2xl font-bold text-purple-600">${nkaTeams}</span>
+                            <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                                <span class="font-semibold text-accent">NKA Teams</span>
+                                <span class="text-2xl font-bold text-accent">${nkaTeams}</span>
                             </div>
                         </div>
                     </div>
                     
                     <!-- Score Statistics -->
-                    <div class="bg-white rounded-xl shadow-lg p-6">
-                        <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                    <div class="card-dark rounded-xl shadow-lg p-6">
+                        <h3 class="text-xl font-bold text-accent mb-4 flex items-center">
                             <span class="mr-2">📊</span>
                             Score Statistics
                         </h3>
                         <div class="space-y-4">
-                            <div class="flex justify-between items-center p-3 bg-green-50 rounded-lg">
-                                <span class="font-semibold text-green-800">Highest Score</span>
-                                <span class="text-xl font-bold text-green-600">${highestScore.toLocaleString()}</span>
+                            <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                                <span class="font-semibold text-accent">Highest Score</span>
+                                <span class="text-xl font-bold text-accent">${highestScore.toLocaleString()}</span>
                             </div>
-                            <div class="flex justify-between items-center p-3 bg-orange-50 rounded-lg">
-                                <span class="font-semibold text-orange-800">Average Score</span>
-                                <span class="text-xl font-bold text-orange-600">${averageScore.toLocaleString()}</span>
+                            <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                                <span class="font-semibold text-accent">Average Score</span>
+                                <span class="text-xl font-bold text-accent">${averageScore.toLocaleString()}</span>
                             </div>
                         </div>
                     </div>
@@ -448,14 +680,14 @@
 
                 <!-- Game Format Distribution -->
                 ${Object.keys(formatStats).length > 0 ? `
-                <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
-                    <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                <div class="card-dark rounded-xl shadow-lg p-6 mb-8">
+                    <h3 class="text-xl font-bold text-accent mb-4 flex items-center">
                         <span class="mr-2">🎯</span>
                         Game Format Distribution
                     </h3>
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                         ${Object.entries(formatStats).map(([format, count]) => `
-                            <div class="bg-gradient-to-br from-indigo-500 to-indigo-600 text-white p-4 rounded-lg text-center">
+                            <div class="accent-gradient text-dark p-4 rounded-lg text-center">
                                 <div class="text-2xl font-bold">${count}</div>
                                 <div class="text-sm opacity-90">${format} Games</div>
                             </div>
@@ -466,8 +698,8 @@
 
                 <!-- Team Performance Leaderboard -->
                 ${teamStats.length > 0 ? `
-                <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
-                    <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                <div class="card-dark rounded-xl shadow-lg p-6 mb-8">
+                    <h3 class="text-xl font-bold text-accent mb-4 flex items-center">
                         <span class="mr-2">🏆</span>
                         Team Performance Leaderboard
                     </h3>
@@ -475,15 +707,15 @@
                         ${teamStats.map((team, index) => `
                             <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
                                 <div class="flex items-center">
-                                    <span class="text-2xl font-bold text-gray-400 w-8">#${index + 1}</span>
+                                    <span class="text-2xl font-bold text-muted w-8">#${index + 1}</span>
                                     <div class="ml-4">
-                                        <h4 class="font-bold capitalize">${team.name}</h4>
-                                        <p class="text-sm text-gray-600">${team.league} League</p>
+                                        <h4 class="font-bold capitalize text-accent">${team.name}</h4>
+                                        <p class="text-sm text-muted">${team.league} League</p>
                                     </div>
                                 </div>
                                 <div class="text-right">
-                                    <div class="text-lg font-bold ${team.winRate >= 50 ? 'text-green-600' : 'text-red-600'}">${team.winRate.toFixed(1)}%</div>
-                                    <div class="text-sm text-gray-500">${team.stats.allTime.wins}-${team.stats.allTime.losses}</div>
+                                    <div class="text-lg font-bold text-accent">${team.winRate.toFixed(1)}%</div>
+                                    <div class="text-sm text-muted">${team.stats.allTime.wins}-${team.stats.allTime.losses}</div>
                                 </div>
                             </div>
                         `).join('')}
@@ -492,35 +724,35 @@
                 ` : ''}
                 
                 <!-- Data Status -->
-                <div class="bg-white rounded-xl shadow-lg p-8">
-                    <h3 class="text-2xl font-bold text-gray-800 mb-6">Data Integration Status</h3>
+                <div class="card-dark rounded-xl shadow-lg p-8">
+                    <h3 class="text-2xl font-bold text-accent mb-6">Data Integration Status</h3>
                     <div class="space-y-4">
-                        <div class="flex items-center justify-between p-4 bg-green-50 rounded-lg border border-green-200">
+                        <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-accent">
                             <div class="flex items-center">
                                 <span class="text-2xl mr-3">📊</span>
-                                <span class="text-green-800 font-semibold">Past Games CSV</span>
+                                <span class="text-accent font-semibold">Past Games CSV</span>
                             </div>
-                            <span class="text-green-600 font-bold">✅ ${gameData.isDataLoaded ? 'Data Loaded' : 'Sample Data'}</span>
+                            <span class="text-accent font-bold">✅ ${gameData.isDataLoaded ? 'Live Data Loaded' : 'Sample Data'}</span>
                         </div>
-                        <div class="flex items-center justify-between p-4 bg-blue-50 rounded-lg border border-blue-200">
+                        <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-accent">
                             <div class="flex items-center">
                                 <span class="text-2xl mr-3">🔵</span>
-                                <span class="text-blue-800 font-semibold">RKL Team Records CSV</span>
+                                <span class="text-accent font-semibold">RKL Team Records CSV</span>
                             </div>
-                            <span class="text-blue-600 font-bold">✅ Ready for Integration</span>
+                            <span class="text-accent font-bold">✅ Live Data Loaded</span>
                         </div>
-                        <div class="flex items-center justify-between p-4 bg-purple-50 rounded-lg border border-purple-200">
+                        <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-accent">
                             <div class="flex items-center">
                                 <span class="text-2xl mr-3">🟣</span>
-                                <span class="text-purple-800 font-semibold">NKA Team Records CSV</span>
+                                <span class="text-accent font-semibold">NKA Team Records CSV</span>
                             </div>
-                            <span class="text-purple-600 font-bold">✅ Ready for Integration</span>
+                            <span class="text-accent font-bold">✅ Live Data Loaded</span>
                         </div>
                     </div>
                     <div class="mt-6 p-4 bg-gray-50 rounded-lg">
-                        <p class="text-gray-700 leading-relaxed">
-                            🚀 <strong>Dashboard Active!</strong> The system is displaying current league data with comprehensive statistics and performance metrics. 
-                            All data is automatically parsed and visualized from your league records.
+                        <p class="text-muted leading-relaxed">
+                            🚀 <strong class="text-accent">Dashboard Active!</strong> The system is now fetching live data from your Google Sheets CSVs. 
+                            All statistics and game records are automatically updated when you modify your spreadsheets.
                         </p>
                     </div>
                 </div>
@@ -538,7 +770,7 @@
         // Initialize the app
         function init() {
             initTabs();
-            renderAllContent();
+            loadCSVData();
         }
 
         // Start the app when DOM is loaded
