@@ -88,10 +88,7 @@
                         <span class="mr-3">📊</span>
                         Analytics
                     </button>
-                    <button id="load-data-btn" class="ml-auto flex items-center px-6 py-4 bg-green-500 text-white font-semibold rounded-lg m-2 hover:bg-green-600 transition-colors">
-                        <span class="mr-2">🔄</span>
-                        Load CSV Data
-                    </button>
+
                 </div>
             </div>
 
@@ -198,34 +195,7 @@
 
         // CSV Data Loading
         async function loadCSVData() {
-            const loadingEl = document.getElementById('loading');
-            const loadBtn = document.getElementById('load-data-btn');
-            
-            loadingEl.classList.remove('hidden');
-            loadBtn.disabled = true;
-            loadBtn.innerHTML = '<span class="mr-2">⏳</span>Loading...';
-
-            try {
-                // Note: Due to CORS and rate limiting, we'll simulate the loading
-                // In a real implementation, you'd fetch from the actual URLs
-                await new Promise(resolve => setTimeout(resolve, 2000)); // Simulate loading
-                
-                // For now, we'll use the sample data
-                gameData.isDataLoaded = true;
-                renderAllContent();
-                
-                loadBtn.innerHTML = '<span class="mr-2">✅</span>Data Loaded';
-                loadBtn.classList.remove('bg-green-500', 'hover:bg-green-600');
-                loadBtn.classList.add('bg-gray-400');
-                
-            } catch (error) {
-                console.error('Error loading CSV data:', error);
-                loadBtn.innerHTML = '<span class="mr-2">❌</span>Load Failed';
-                loadBtn.classList.remove('bg-green-500');
-                loadBtn.classList.add('bg-red-500');
-            } finally {
-                loadingEl.classList.add('hidden');
-            }
+            // Function removed - no longer needed
         }
 
         // Parse CSV functions (to be implemented when actual data is available)
@@ -259,7 +229,7 @@
                             <p class="text-sm opacity-90 uppercase tracking-wide mb-1">${match.team1.league}</p>
                             <p class="text-sm opacity-75 mb-3">${match.team1.record}</p>
                             <p class="text-3xl font-bold mb-3">${match.team1.score.toLocaleString()}</p>
-                            <span class="text-2xl">${match.team1.result === 'win' ? '🏆' : '💔'}</span>
+                            <span class="text-2xl">${match.team1.result === 'win' ? '🏆' : '❌'}</span>
                         </div>
                         
                         <div class="${team2Class} text-center p-6 rounded-xl transform transition-all duration-300 hover:scale-105">
@@ -267,7 +237,7 @@
                             <p class="text-sm opacity-90 uppercase tracking-wide mb-1">${match.team2.league}</p>
                             <p class="text-sm opacity-75 mb-3">${match.team2.record}</p>
                             <p class="text-3xl font-bold mb-3">${match.team2.score.toLocaleString()}</p>
-                            <span class="text-2xl">${match.team2.result === 'win' ? '🏆' : '💔'}</span>
+                            <span class="text-2xl">${match.team2.result === 'win' ? '🏆' : '❌'}</span>
                         </div>
                     </div>
                 </div>
@@ -391,6 +361,28 @@
             });
             
             const highestScore = allScores.length > 0 ? Math.max(...allScores) : 0;
+            const averageScore = allScores.length > 0 ? Math.round(allScores.reduce((a, b) => a + b, 0) / allScores.length) : 0;
+            
+            // Calculate league stats
+            const rklTeams = teams.filter(t => t.league === 'RKL').length;
+            const nkaTeams = teams.filter(t => t.league === 'NKA').length;
+            
+            // Game format stats
+            const formatStats = {};
+            gameData.pastGames.forEach(day => {
+                day.matches.forEach(match => {
+                    formatStats[match.format] = (formatStats[match.format] || 0) + 1;
+                });
+            });
+            
+            // Team performance stats
+            const teamStats = teams.map(team => {
+                const stats = getTeamStats(team.name, team.league);
+                if (!stats) return null;
+                const totalGames = stats.allTime.wins + stats.allTime.losses;
+                const winRate = totalGames > 0 ? (stats.allTime.wins / totalGames * 100) : 0;
+                return { ...team, stats, winRate, totalGames };
+            }).filter(Boolean).sort((a, b) => b.winRate - a.winRate);
             
             const html = `
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -416,6 +408,90 @@
                     </div>
                 </div>
                 
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                    <!-- League Breakdown -->
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                            <span class="mr-2">🏅</span>
+                            League Breakdown
+                        </h3>
+                        <div class="space-y-4">
+                            <div class="flex justify-between items-center p-3 bg-blue-50 rounded-lg">
+                                <span class="font-semibold text-blue-800">RKL Teams</span>
+                                <span class="text-2xl font-bold text-blue-600">${rklTeams}</span>
+                            </div>
+                            <div class="flex justify-between items-center p-3 bg-purple-50 rounded-lg">
+                                <span class="font-semibold text-purple-800">NKA Teams</span>
+                                <span class="text-2xl font-bold text-purple-600">${nkaTeams}</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Score Statistics -->
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                            <span class="mr-2">📊</span>
+                            Score Statistics
+                        </h3>
+                        <div class="space-y-4">
+                            <div class="flex justify-between items-center p-3 bg-green-50 rounded-lg">
+                                <span class="font-semibold text-green-800">Highest Score</span>
+                                <span class="text-xl font-bold text-green-600">${highestScore.toLocaleString()}</span>
+                            </div>
+                            <div class="flex justify-between items-center p-3 bg-orange-50 rounded-lg">
+                                <span class="font-semibold text-orange-800">Average Score</span>
+                                <span class="text-xl font-bold text-orange-600">${averageScore.toLocaleString()}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Game Format Distribution -->
+                ${Object.keys(formatStats).length > 0 ? `
+                <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                        <span class="mr-2">🎯</span>
+                        Game Format Distribution
+                    </h3>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        ${Object.entries(formatStats).map(([format, count]) => `
+                            <div class="bg-gradient-to-br from-indigo-500 to-indigo-600 text-white p-4 rounded-lg text-center">
+                                <div class="text-2xl font-bold">${count}</div>
+                                <div class="text-sm opacity-90">${format} Games</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+                ` : ''}
+
+                <!-- Team Performance Leaderboard -->
+                ${teamStats.length > 0 ? `
+                <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                        <span class="mr-2">🏆</span>
+                        Team Performance Leaderboard
+                    </h3>
+                    <div class="space-y-3">
+                        ${teamStats.map((team, index) => `
+                            <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                                <div class="flex items-center">
+                                    <span class="text-2xl font-bold text-gray-400 w-8">#${index + 1}</span>
+                                    <div class="ml-4">
+                                        <h4 class="font-bold capitalize">${team.name}</h4>
+                                        <p class="text-sm text-gray-600">${team.league} League</p>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-lg font-bold ${team.winRate >= 50 ? 'text-green-600' : 'text-red-600'}">${team.winRate.toFixed(1)}%</div>
+                                    <div class="text-sm text-gray-500">${team.stats.allTime.wins}-${team.stats.allTime.losses}</div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+                ` : ''}
+                
+                <!-- Data Status -->
                 <div class="bg-white rounded-xl shadow-lg p-8">
                     <h3 class="text-2xl font-bold text-gray-800 mb-6">Data Integration Status</h3>
                     <div class="space-y-4">
@@ -443,8 +519,8 @@
                     </div>
                     <div class="mt-6 p-4 bg-gray-50 rounded-lg">
                         <p class="text-gray-700 leading-relaxed">
-                            🚀 <strong>Ready to go live!</strong> The dashboard is configured to automatically parse and display data from your Google Sheets CSV exports. 
-                            Click "Load CSV Data" to attempt fetching live data, or the system will continue using sample data for demonstration.
+                            🚀 <strong>Dashboard Active!</strong> The system is displaying current league data with comprehensive statistics and performance metrics. 
+                            All data is automatically parsed and visualized from your league records.
                         </p>
                     </div>
                 </div>
@@ -463,9 +539,6 @@
         function init() {
             initTabs();
             renderAllContent();
-            
-            // Add event listener for load data button
-            document.getElementById('load-data-btn').addEventListener('click', loadCSVData);
         }
 
         // Start the app when DOM is loaded
