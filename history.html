@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>League History Dashboard</title>
+    <title>Real Scrims Dashboard</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
     <style>
@@ -105,6 +105,25 @@
             to { transform: rotate(360deg); }
         }
         
+        /* Custom scrollbar styling for tabs */
+        .tab-container::-webkit-scrollbar {
+            height: 6px;
+        }
+        
+        .tab-container::-webkit-scrollbar-track {
+            background: var(--card-color);
+            border-radius: 3px;
+        }
+        
+        .tab-container::-webkit-scrollbar-thumb {
+            background: var(--accent-color);
+            border-radius: 3px;
+        }
+        
+        .tab-container::-webkit-scrollbar-thumb:hover {
+            background: #427564;
+        }
+        
         /* Override Tailwind colors for dark theme */
         .bg-white {
             background-color: var(--card-color) !important;
@@ -174,8 +193,8 @@
             <div class="max-w-7xl mx-auto">
                 <div class="flex items-center justify-between">
                     <div>
-                        <h1 class="text-5xl font-bold mb-2" style="color: #121212;">League History</h1>
-                        <p class="text-xl opacity-90" style="color: #1a1a1a;">Track games, records, and team performance across RKL and NKA leagues</p>
+                        <h1 class="text-5xl font-bold mb-2" style="color: #121212;">Real Scrims Dashboard</h1>
+                        <p class="text-xl opacity-90" style="color: #1a1a1a;">Track games, records, and team performance across Real Karma leagues</p>
                     </div>
                     <div class="text-6xl">🏆</div>
                 </div>
@@ -185,16 +204,16 @@
         <div class="max-w-7xl mx-auto p-6">
             <!-- Navigation Tabs -->
             <div class="card-dark rounded-xl shadow-lg mb-8 overflow-hidden">
-                <div class="flex">
-                    <button id="games-tab" class="tab-btn flex items-center px-8 py-6 font-semibold transition-all duration-300 tab-active">
+                <div class="flex overflow-x-auto tab-container" style="scrollbar-width: thin; scrollbar-color: var(--accent-color) var(--card-color);">
+                    <button id="games-tab" class="tab-btn flex items-center px-8 py-6 font-semibold transition-all duration-300 tab-active whitespace-nowrap flex-shrink-0">
                         <span class="mr-3">📅</span>
                         Past Games
                     </button>
-                    <button id="teams-tab" class="tab-btn flex items-center px-8 py-6 font-semibold transition-all duration-300 tab-inactive">
+                    <button id="teams-tab" class="tab-btn flex items-center px-8 py-6 font-semibold transition-all duration-300 tab-inactive whitespace-nowrap flex-shrink-0">
                         <span class="mr-3">👥</span>
                         Team Records
                     </button>
-                    <button id="analytics-tab" class="tab-btn flex items-center px-8 py-6 font-semibold transition-all duration-300 tab-inactive">
+                    <button id="analytics-tab" class="tab-btn flex items-center px-8 py-6 font-semibold transition-all duration-300 tab-inactive whitespace-nowrap flex-shrink-0">
                         <span class="mr-3">📊</span>
                         Analytics
                     </button>
